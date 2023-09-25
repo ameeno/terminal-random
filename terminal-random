@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Play random Asciinema videos forever
+while true; do
+
+    # Pick a random page number between 1 and 4500
+    page_number=$((1 + RANDOM % 4501))
+
+    # Curl the URL
+    output=$(curl -s "https://asciinema.org/explore/public?order=popularity&page=$page_number")
+
+    # Extract links with /a/xxxxxx pattern
+    links=$(echo "$output" | grep -o '/a/[0-9]*')
+
+    # Pick a random link
+    random_link=$(echo "$links" | shuf -n 1)
+
+    # Play random video with custom speed and idle settings
+    asciinema play --idle-time-limit=0.25 --speed=1.35 "http://asciinema.org$random_link"
+done
